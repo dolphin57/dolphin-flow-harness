@@ -1,0 +1,31 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dfh",
+  "description": "Claude Code harness multi-agent orchestration",
+  "owner": {
+    "name": "Dolphin",
+    "email": "ericql57@163.com"
+  },
+  "plugins": [
+    {
+      "name": "dolphin-flow-harness",
+      "description": "Dolphin Flow Harness is an intelligent orchestration framework designed to enhance Claude Code's agentic capabilities through structured workflow management. Inspired by the graceful coordination of dolphin pods, this harness system provides a streamlined approach to managing complex, multi-step AI operations.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Dolphin",
+		"email": "ericql57@163.com"
+      },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://github.com/dolphin57/dolphin-flow-harness",
+      "tags": [
+        "multi-agent",
+        "orchestration",
+        "delegation",
+        "todo-management",
+        "ultrawork"
+      ]
+    }
+  ],
+  "version": "1.0.0"
+}

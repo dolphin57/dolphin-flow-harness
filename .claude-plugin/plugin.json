@@ -1,0 +1,16 @@
+{
+  "name": "dolphin-flow-harness",
+  "version": "1.0.0",
+  "description": "Minimal Claude Code enhancement plugin",
+  "author": {
+    "name": "Dolphin Flow Harness is an intelligent orchestration framework designed to enhance Claude Code's agentic capabilities through structured workflow management. Inspired by the graceful coordination of dolphin pods, this harness system provides a streamlined approach to managing complex, multi-step AI operations."
+  },
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "multi-agent"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}
