@@ -28,32 +28,6 @@
 
 Dolphin-Flow-Harness 采用模块化的 Agent 系统和关键字触发机制，将复杂的 AI 研发拆解为标准化的工作流：
 
-### 核心架构
-
-```mermaid
-graph TB
-    A[用户输入] --> B{关键字检测}
-    B -->|dfh-analyst| C[需求分析 Agent]
-    B -->|dfh-autopilot| D[自动驾驶 Agent]
-    B -->|dfh-refactor| E[代码重构 Agent]
-    
-    C --> F[生成分析报告]
-    D --> G[自动执行任务]
-    E --> H[代码优化建议]
-    
-    F --> I[.dfh/autopilot/analyst/spec.md]
-    G --> J[代码实现]
-    H --> K[重构报告]
-```
-
-### 工作流程
-
-1. **关键字触发** - 用户输入包含关键字的请求
-2. **Hook 激活** - `hooks.json` 配置触发 `keyword-detector.mjs`
-3. **Skill 加载** - 自动加载对应的 SKILL.md 定义
-4. **Agent 执行** - Agent 根据提示词执行任务
-5. **结果输出** - 生成结构化的分析报告或代码
-
 ### 关键字系统
 
 | 关键字             | 功能        | Skill                         |
@@ -161,57 +135,6 @@ npm run build
 ```
 
 ## 📂 目录结构 (Directory Structure)
-
-```text
-dolphin-flow-harness/
-├── .claude-plugin/          # Claude Code 插件配置
-│   ├── marketplace.json     # 市场配置
-│   └── plugin.json          # 插件元数据
-├── agents/                  # Agent 提示词定义
-│   └── analyst.md           # Analyst Agent 提示词
-├── dist/                    # 编译输出目录
-├── docs/                    # 项目文档
-│   ├── ANALYST-KEYWORD-TRIGGER-FLOW.md  # 关键字触发流程
-│   ├── ARCHITECTURE-COMPARISON.md       # 架构对比分析
-│   ├── BUILD-FLOW.md                    # 构建流程说明
-│   ├── CODE-REVIEW-REPORT.md            # 代码审查报告
-│   └── DFH-ANALYST-GUIDE.md             # Analyst 使用指南
-├── hooks/                   # Claude Code Hooks 配置
-│   └── hooks.json           # Hook 定义
-├── scripts/                 # 构建和运行脚本
-│   ├── lib/                 # 工具库
-│   │   └── stdin.mjs        # stdin 读取工具
-│   ├── build-keyword-detector.mjs  # 构建脚本
-│   ├── keyword-detector.mjs        # 关键字检测器
-│   ├── run.cjs                     # 跨平台运行器
-│   └── test-analyst-keyword.mjs    # 测试脚本
-├── skills/                  # Skill 定义目录
-│   ├── dfh-analyst/         # Analyst Skill
-│   │   └── SKILL.md         # Skill 定义
-│   ├── dfh-autopilot/       # Autopilot Skill
-│   │   └── SKILL.md         # Skill 定义
-│   └── dfh-refactor/        # Refactor Skill
-│       └── SKILL.md         # Skill 定义
-├── src/                     # TypeScript 源码
-│   ├── agents/              # Agent 系统
-│   │   ├── analyst.ts       # Analyst Agent
-│   │   ├── definitions.ts   # Agent 注册
-│   │   ├── index.ts         # 导出
-│   │   ├── types.ts         # 类型定义
-│   │   └── utils.ts         # 工具函数
-│   ├── hooks/               # Hook 系统
-│   │   └── keyword-detector/
-│   │       ├── __tests__/   # 单元测试
-│   │       ├── index.ts     # 主入口
-│   │       ├── patterns.ts  # 关键字模式
-│   │       ├── types.ts     # 类型定义
-│   │       └── utils.ts     # 工具函数
-│   └── index.ts             # 主导出
-├── package.json             # 项目配置
-├── tsconfig.json            # TypeScript 配置
-├── vitest.config.ts         # 测试配置
-└── README.md                # 项目文档
-```
 
 ### 核心模块说明
 
