@@ -1,8 +1,8 @@
 # 🐬 Dolphin-Flow-Harness
 
-[!\[License: MIT\](https://img.shields.io/badge/License-MIT-blue.svg null)](https://opensource.org/licenses/MIT)
-[!\[Version\](https://img.shields.io/badge/version-v1.0.0-green.svg null)]()
-[!\[PRs Welcome\](https://img.shields.io/badge/PRs-welcome-brightgreen.svg null)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-v1.0.0-green.svg)](https://github.com/your-username/dolphin-flow-harness)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/your-username/dolphin-flow-harness/pulls)
 
 > **Dolphin-Flow-Harness** 是一个基于 **Harness Engineering治理工程** 理念打造的高效工作流引擎。专为 **AI 驱动的需求开发** 与 **遗留代码重构** 场景设计，致力于消除开发过程中的摩擦力，实现人机协同研发效能的最大化。
 
