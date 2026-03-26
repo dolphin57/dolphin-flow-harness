@@ -1,51 +1,123 @@
 ---
 name: dfh-refactor
-description: Refactor code using Dolphin Flow Harness coordination
-triggers:
-  - "dfh-refactor"
-  - "dfh refactor"
-agent: executor
-model: sonnet
+description: Dolphin Flow Harness Refactor - Code refactoring and optimization
 ---
 
-# DFH Refactor Skill
+# Dolphin Flow Harness Refactor
 
-## Purpose
+[DFH REFACTOR ACTIVATED]
 
-Refactor code with intelligent coordination using Dolphin Flow Harness. Like a dolphin pod working together, this skill coordinates multiple agents to clean up, optimize, and improve code structure while preserving functionality.
+## Overview
 
-## Workflow
+Dolphin Flow Harness Refactor 是一个代码重构和优化工具，能够自动识别代码问题并提供改进建议。
 
-1. **Analyze**: Examine the current code structure and identify refactoring opportunities
-2. **Plan**: Create a refactoring plan with clear steps and priorities
-3. **Execute**: Apply refactoring changes systematically
-4. **Verify**: Run tests to ensure functionality is preserved
-5. **Review**: Validate that code quality has improved
+**核心价值：** 提高代码质量，减少技术债务，优化性能。
 
-## Usage
+## Supported Triggers
 
-Invoke with:
-- `dfh-refactor this file`
-- `dfh-refactor the function X`
-- `dfh-refactor improve the architecture`
+- User says "dfh-refactor", "dfh refactor", "refactor"
+- User wants to improve code quality
+- User needs to reduce technical debt
 
-## Principles
+## Execution Steps
 
-- Preserve existing functionality
-- Improve readability and maintainability
-- Apply consistent coding patterns
-- Minimize risk by working incrementally
-- Run tests after each significant change
+1. **Analyze Code**: Parse codebase and identify issues
+2. **Identify Patterns**: Find code smells and anti-patterns
+3. **Generate Suggestions**: Create refactoring recommendations
+4. **Apply Changes**: Implement refactoring (with approval)
+5. **Verify Improvements**: Validate refactoring results
+
+## Output Format
+
+```markdown
+## Refactoring Report
+
+### Code Analysis
+- Files analyzed: [number]
+- Issues found: [number]
+- Severity: [critical/major/minor]
+
+### Identified Issues
+1. **[Issue Type]**: [Description]
+   - Location: [file:line]
+   - Impact: [description]
+   - Suggestion: [recommendation]
+
+### Refactoring Plan
+1. [Refactoring task 1]
+2. [Refactoring task 2]
+3. [Refactoring task 3]
+
+### Expected Improvements
+- Code quality: [+X%]
+- Performance: [+X%]
+- Maintainability: [+X%]
+- Technical debt: [-X%]
+
+### Applied Changes
+- ✅ [Change 1]
+- ✅ [Change 2]
+- ✅ [Change 3]
+```
 
 ## Configuration
 
-Configure via `.omc/settings.json`:
+User can configure in `.claude/settings.json`:
+
 ```json
 {
-  "dfh-refactor": {
-    "testThreshold": 100,
-    "incremental": true,
-    "backup": true
+  "dfh": {
+    "refactor": {
+      "autoApply": false,
+      "severity": "major",
+      "excludePatterns": ["**/*.test.ts", "**/*.spec.ts"]
+    }
   }
 }
 ```
+
+## Usage
+
+Basic usage:
+```
+dfh-refactor optimize the authentication module
+```
+
+Analyze specific file:
+```
+dfh-refactor src/utils/helper.ts
+```
+
+## Refactoring Categories
+
+### 1. Code Quality
+- Remove duplicate code
+- Simplify complex logic
+- Improve naming
+- Add missing documentation
+
+### 2. Performance
+- Optimize loops
+- Reduce memory usage
+- Improve algorithm efficiency
+- Cache frequently used data
+
+### 3. Maintainability
+- Extract methods
+- Reduce coupling
+- Improve cohesion
+- Apply design patterns
+
+### 4. Security
+- Fix vulnerabilities
+- Improve input validation
+- Enhance error handling
+- Secure data handling
+
+## Success Criteria
+
+- [ ] Code quality improved
+- [ ] No regressions
+- [ ] Tests pass
+- [ ] Performance maintained or improved
+- [ ] Documentation updated

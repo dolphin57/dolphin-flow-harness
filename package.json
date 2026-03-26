@@ -15,23 +15,36 @@
     "dist",
     "agents",
     "skills",
+    "scripts",
     "bridge",
     ".claude-plugin",
     ".mcp.json"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run build:scripts",
+    "build:scripts": "node scripts/build-keyword-detector.mjs",
+    "build:watch": "tsc --watch",
     "dev": "tsc --watch",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "clean": "rm -rf dist scripts/keyword-detector.mjs"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.1.0",
-    "@modelcontextprotocol/sdk": "^1.0.0",
-    "uuid": "^9.0.0"
+    "@modelcontextprotocol/sdk": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "typescript": "^5.7.0"
+    "@types/node": "^22.19.15",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "esbuild": "^0.20.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.7.0",
+    "vitest": "^1.0.0"
   },
   "engines": {
     "node": ">=20.0.0"

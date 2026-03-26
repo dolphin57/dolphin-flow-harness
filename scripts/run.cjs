@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 'use strict';
 /**
- * OMC Cross-platform hook runner (run.cjs)
+ * DFH Cross-platform hook runner (run.cjs)
  *
  * Uses process.execPath (the Node binary already running this script) to spawn
  * the target .mjs hook, bypassing PATH / shell discovery issues.
  *
  * Replaces the `sh + find-node.sh` chain that fails on Windows because
  * /usr/bin/sh is a PE32+ binary the OS refuses to execute natively.
- * Fixes issues #909, #899, #892, #869.
  *
  * Usage (from hooks.json, after setup patches the absolute node path in):
  *   /abs/path/to/node "${CLAUDE_PLUGIN_ROOT}/scripts/run.cjs" \
