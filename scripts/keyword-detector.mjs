@@ -21,6 +21,12 @@ var KEYWORD_PATTERNS = [
     description: "Full autonomous execution"
   },
   {
+    type: "dfh-autopilot",
+    pattern: /\b(dfh-autopilot|dfh autopilot|dolphin autopilot)\b/i,
+    priority: 3,
+    description: "DFH local autopilot execution"
+  },
+  {
     type: "team",
     pattern: /(?<!\b(?:my|the|our|a|his|her|their|its)\s)\bteam\b/i,
     priority: 4,
@@ -79,6 +85,7 @@ var KEYWORD_PRIORITY = [
   "cancel",
   "ralph",
   "autopilot",
+  "dfh-autopilot",
   "team",
   "ultrawork",
   "ralplan",
@@ -98,6 +105,15 @@ function getPatternPriority(type) {
 }
 
 // src/hooks/keyword-detector/utils.ts
+var KEYWORD_TO_SKILL_MAP = {
+  autopilot: "dfh-autopilot",
+  "dfh-autopilot": "dfh-autopilot",
+  "dfh-analyst": "dfh-analyst",
+  "dfh-refactor": "dfh-refactor"
+};
+function resolveSkillName(skillName) {
+  return KEYWORD_TO_SKILL_MAP[skillName] ?? skillName;
+}
 function extractPrompt(input) {
   if (input.prompt)
     return input.prompt;
@@ -123,13 +139,14 @@ function resolveConflicts(matches) {
   return resolved;
 }
 function createSkillInvocation(skillName, originalPrompt, args = "") {
+  const resolvedSkillName = resolveSkillName(skillName);
   const argsSection = args ? `
 Arguments: ${args}` : "";
   return `[MAGIC KEYWORD: ${skillName.toUpperCase()}]
 
 You MUST invoke the skill using the Skill tool:
 
-Skill: dolphin-flow-harness:${skillName}${argsSection}
+Skill: dolphin-flow-harness:${resolvedSkillName}${argsSection}
 
 User request:
 ${originalPrompt}
@@ -144,10 +161,11 @@ function createMultiSkillInvocation(skills, originalPrompt) {
   }
   const skillBlocks = skills.map(
     (s, i) => {
+      const resolvedSkillName = resolveSkillName(s.name);
       const argsSection = s.args ? `
 Arguments: ${s.args}` : "";
       return `### Skill ${i + 1}: ${s.name.toUpperCase()}
-Skill: dolphin-flow-harness:${s.name}${argsSection}`;
+Skill: dolphin-flow-harness:${resolvedSkillName}${argsSection}`;
     }
   ).join("\n\n");
   return `[MAGIC KEYWORDS DETECTED: ${skills.map((s) => s.name.toUpperCase()).join(", ")}]
@@ -171,13 +189,19 @@ function createHookOutput(additionalContext) {
   };
 }
 function extractDirectory(input) {
+  if (input.cwd) {
+    return input.cwd;
+  }
+  if (input.directory) {
+    return input.directory;
+  }
   try {
     if (typeof __dirname !== "undefined" && __dirname) {
       return __dirname;
     }
   } catch {
   }
-  return input.cwd || input.directory || process.cwd();
+  return process.cwd();
 }
 
 // src/hooks/keyword-detector/index.ts

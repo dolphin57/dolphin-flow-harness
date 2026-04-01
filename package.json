@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "build": "tsc && npm run build:scripts",
-    "build:scripts": "node scripts/build-keyword-detector.mjs",
+    "build:scripts": "node scripts/build-keyword-detector.mjs && node scripts/build-skill-injector.mjs && node scripts/build-autopilot-stop-hook.mjs",
     "build:watch": "tsc --watch",
     "dev": "tsc --watch",
     "start": "node dist/index.js",

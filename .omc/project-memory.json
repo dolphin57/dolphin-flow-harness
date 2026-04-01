@@ -1,0 +1,192 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1774945425417,
+  "projectRoot": "E:\\AIGC\\VibeCoding\\ClaudeCode\\harness-eng\\dolphin-flow-harness",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": ">=20.0.0",
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "esbuild",
+        "version": "0.20.0",
+        "category": "build"
+      },
+      {
+        "name": "vitest",
+        "version": "1.0.0",
+        "category": "testing"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": "Node.js 20.0.0"
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": "npm test",
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "build": "tsc && npm run build:scripts",
+      "build:scripts": "node scripts/build-keyword-detector.mjs && node scripts/build-skill-injector.mjs && node scripts/build-autopilot-stop-hook.mjs",
+      "build:watch": "tsc --watch",
+      "dev": "tsc --watch",
+      "start": "node dist/index.js",
+      "test": "vitest run",
+      "test:watch": "vitest",
+      "test:coverage": "vitest run --coverage",
+      "typecheck": "tsc --noEmit",
+      "lint": "eslint src --ext .ts",
+      "clean": "rm -rf dist scripts/keyword-detector.mjs"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "scripts",
+      "src"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "agents": {
+      "path": "agents",
+      "purpose": null,
+      "fileCount": 6,
+      "lastAccessed": 1774945425389,
+      "keyFiles": [
+        "analyst.md",
+        "architect.md",
+        "critic.md",
+        "executor.md",
+        "planner.md"
+      ]
+    },
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 4,
+      "lastAccessed": 1774945425390,
+      "keyFiles": [
+        "index.d.ts",
+        "index.d.ts.map",
+        "index.js",
+        "index.js.map"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 7,
+      "lastAccessed": 1774945425399,
+      "keyFiles": [
+        "ANALYST-KEYWORD-TRIGGER-FLOW.md",
+        "ARCHITECTURE-COMPARISON.md",
+        "autopilot-replica-analysis.md",
+        "AUTOPILOT_DOD.md",
+        "BUILD-FLOW.md"
+      ]
+    },
+    "hooks": {
+      "path": "hooks",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1774945425399,
+      "keyFiles": [
+        "hooks.json"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 11,
+      "lastAccessed": 1774945425400,
+      "keyFiles": [
+        "autopilot-stop-hook.mjs",
+        "autopilot-stop-hook.mjs.map",
+        "build-autopilot-stop-hook.mjs",
+        "build-keyword-detector.mjs",
+        "build-skill-injector.mjs"
+      ]
+    },
+    "skills": {
+      "path": "skills",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774945425400,
+      "keyFiles": []
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 1,
+      "lastAccessed": 1774945425401,
+      "keyFiles": [
+        "index.ts"
+      ]
+    },
+    "scripts\\lib": {
+      "path": "scripts\\lib",
+      "purpose": "Library code",
+      "fileCount": 1,
+      "lastAccessed": 1774945425402,
+      "keyFiles": [
+        "stdin.mjs"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "C:\\Users\\dolphin\\.claude\\plugins\\marketplaces\\anthropic-agent-skills\\skills\\mvc2springboot\\SKILL.md",
+      "accessCount": 4,
+      "lastAccessed": 1774948067198,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\dolphin\\.claude\\plugins\\marketplaces\\anthropic-agent-skills\\skills\\mvc2springboot",
+      "accessCount": 2,
+      "lastAccessed": 1774946903523,
+      "type": "directory"
+    },
+    {
+      "path": "C:\\Users\\dolphin\\.claude\\plugins\\marketplaces\\anthropic-agent-skills\\skills\\mvc2springboot\\scripts\\migrate.js",
+      "accessCount": 2,
+      "lastAccessed": 1774947986956,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\dolphin\\.claude\\plugins\\marketplaces",
+      "accessCount": 1,
+      "lastAccessed": 1774945561317,
+      "type": "directory"
+    }
+  ],
+  "userDirectives": []
+}

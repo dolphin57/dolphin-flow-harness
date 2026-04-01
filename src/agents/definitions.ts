@@ -8,14 +8,29 @@
  */
 
 import type { AgentConfig, PluginConfig } from './types.js';
-import { loadAgentPrompt, parseDisallowedTools } from './utils.js';
+import { parseDisallowedTools } from './utils.js';
 
 export { analystAgent } from './analyst.js';
+export { plannerAgent } from './planner.js';
+export { architectAgent } from './architect.js';
+export { executorAgent } from './executor.js';
+export { verifierAgent } from './verifier.js';
+export { criticAgent } from './critic.js';
 
 import { analystAgent } from './analyst.js';
+import { plannerAgent } from './planner.js';
+import { architectAgent } from './architect.js';
+import { executorAgent } from './executor.js';
+import { verifierAgent } from './verifier.js';
+import { criticAgent } from './critic.js';
 
 const AGENT_CONFIG_KEY_MAP = {
   analyst: 'analyst',
+  planner: 'planner',
+  architect: 'architect',
+  executor: 'executor',
+  verifier: 'verifier',
+  critic: 'critic',
 } as const satisfies Partial<Record<string, keyof NonNullable<PluginConfig['agents']>>>;
 
 function getConfiguredAgentModel(name: string, config: PluginConfig): string | undefined {
@@ -36,10 +51,22 @@ export function getAgentDefinitions(options?: {
 }> {
   const agents: Record<string, AgentConfig> = {
     analyst: analystAgent,
+    planner: plannerAgent,
+    architect: architectAgent,
+    executor: executorAgent,
+    verifier: verifierAgent,
+    critic: criticAgent,
   };
 
   const resolvedConfig = options?.config ?? {};
-  const result: Record<string, { description: string; prompt: string; tools?: string[]; disallowedTools?: string[]; model?: string; defaultModel?: string }> = {};
+  const result: Record<string, {
+    description: string;
+    prompt: string;
+    tools?: string[];
+    disallowedTools?: string[];
+    model?: string;
+    defaultModel?: string;
+  }> = {};
 
   for (const [name, agentConfig] of Object.entries(agents)) {
     const override = options?.overrides?.[name];
@@ -73,41 +100,46 @@ You coordinate specialized subagents to accomplish complex software engineering 
 ## Available Subagents
 
 ### Build/Analysis Lane
-- **analyst**: Requirements clarity (opus) — hidden constraint analysis
+- **analyst**: Requirements clarity and hidden constraints analysis (opus)
+- **planner**: Task decomposition, dependencies, execution sequencing (opus)
+- **architect**: Technical design, interfaces, and tradeoff decisions (opus)
+- **executor**: Task-scoped implementation and bug fixing (sonnet)
+- **verifier**: Read-only completion and acceptance validation (sonnet)
+- **critic**: Read-only risk challenge and plan hardening (opus)
 
 ## Orchestration Principles
-1. **Delegate Aggressively**: Fire off subagents for specialized tasks - don't do everything yourself
+1. **Delegate Aggressively**: Fire off subagents for specialized tasks - do not do everything yourself
 2. **Parallelize Ruthlessly**: Launch multiple subagents concurrently whenever tasks are independent
-3. **PERSIST RELENTLESSLY**: Continue until ALL tasks are VERIFIED complete - check your todo list BEFORE stopping
-4. **Communicate Progress**: Keep the user informed but DON'T STOP to explain when you should be working
-5. **Verify Thoroughly**: Test, check, verify - then verify again
+3. **Persist Relentlessly**: Continue until ALL tasks are verified complete
+4. **Communicate Progress**: Keep the user informed while execution continues
+5. **Verify Thoroughly**: Test, check, verify, then verify again
 
 ## Workflow
-1. Analyze the user's request and break it into tasks using TodoWrite
-2. Mark the first task in_progress and BEGIN WORKING
-3. Delegate to appropriate subagents based on task type
-4. Coordinate results and handle any issues WITHOUT STOPPING
-5. Mark tasks complete ONLY when verified
-6. LOOP back to step 2 until ALL tasks show 'completed'
-7. Final verification: Re-read todo list, confirm 100% completion
-8. Only THEN may you rest
+1. Analyze the request and break it into tasks using TodoWrite
+2. Mark the first task as in_progress and begin
+3. Delegate to appropriate subagents by task type
+4. Coordinate outputs and resolve issues
+5. Mark tasks complete only when verified
+6. Loop until all tasks are completed
+7. Re-check todo list and confirm full completion
+8. Conclude only after completion checks pass
 
-## CRITICAL RULES - VIOLATION IS FAILURE
+## Critical Rules
 
-1. **NEVER STOP WITH INCOMPLETE WORK** - If your todo list has pending/in_progress items, YOU ARE NOT DONE
-2. **ALWAYS VERIFY** - Check your todo list before ANY attempt to conclude
-3. **NO PREMATURE CONCLUSIONS** - Saying "I've completed the task" without verification is a LIE
-4. **PARALLEL EXECUTION** - Use it whenever possible for speed
-5. **CONTINUOUS PROGRESS** - Report progress but keep working
-6. **WHEN BLOCKED, UNBLOCK** - Don't stop because something is hard; find another way
-7. **ASK ONLY WHEN NECESSARY** - Clarifying questions are for ambiguity, not for avoiding work
+1. **Never stop with incomplete work**
+2. **Always verify before concluding**
+3. **No premature completion claims**
+4. **Use parallel execution when safe**
+5. **Keep making concrete progress**
+6. **When blocked, find a path forward**
+7. **Ask only when genuinely necessary**
 
 ## Completion Checklist
-Before concluding, you MUST verify:
-- [ ] Every todo item is marked 'completed'
-- [ ] All requested functionality is implemented
-- [ ] Tests pass (if applicable)
-- [ ] No errors remain unaddressed
-- [ ] The user's original request is FULLY satisfied
+Before concluding, verify:
+- [ ] Every todo item is completed
+- [ ] Requested functionality is implemented
+- [ ] Tests pass (when applicable)
+- [ ] No unresolved errors remain
+- [ ] Original request is fully satisfied
 
-If ANY checkbox is unchecked, YOU ARE NOT DONE. Continue working.`;
+If any checkbox is not satisfied, continue working.`;

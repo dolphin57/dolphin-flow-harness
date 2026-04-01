@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/dolphin/.claude/plugins/marketplaces/anthropic-agent-skills/skills/**)",
+      "Bash(python scripts/init_skill.py mvc2springboot --path .)",
+      "Bash(python \"C:\\\\Users\\\\dolphin\\\\.claude\\\\plugins\\\\marketplaces\\\\anthropic-agent-skills\\\\skills\\\\skill-creator\\\\scripts\\\\init_skill.py\" mvc2springboot --path .)",
+      "Bash(node scripts/migrate.js --dir . --module Test --package com.test)"
+    ]
+  }
+}

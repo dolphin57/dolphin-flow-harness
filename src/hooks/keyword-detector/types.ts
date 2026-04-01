@@ -8,6 +8,7 @@ export type KeywordType =
   | 'cancel'
   | 'ralph'
   | 'autopilot'
+  | 'dfh-autopilot'
   | 'team'
   | 'ultrawork'
   | 'ralplan'

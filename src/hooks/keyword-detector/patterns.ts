@@ -26,6 +26,12 @@ export const KEYWORD_PATTERNS: KeywordPattern[] = [
     description: 'Full autonomous execution'
   },
   {
+    type: 'dfh-autopilot',
+    pattern: /\b(dfh-autopilot|dfh autopilot|dolphin autopilot)\b/i,
+    priority: 3,
+    description: 'DFH local autopilot execution'
+  },
+  {
     type: 'team',
     pattern: /(?<!\b(?:my|the|our|a|his|her|their|its)\s)\bteam\b/i,
     priority: 4,
@@ -85,6 +91,7 @@ export const KEYWORD_PRIORITY: KeywordType[] = [
   'cancel',
   'ralph',
   'autopilot',
+  'dfh-autopilot',
   'team',
   'ultrawork',
   'ralplan',

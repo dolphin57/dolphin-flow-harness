@@ -1,97 +1,128 @@
 ---
 name: dfh-autopilot
-description: Dolphin Flow Harness Autopilot - Full autonomous execution mode
+description: Dolphin Flow Harness Autopilot - state/pipeline strict execution mode
 ---
 
 # Dolphin Flow Harness Autopilot
 
 [DFH AUTOPILOT ACTIVATED]
 
-## Overview
+## Mission
 
-Dolphin Flow Harness Autopilot 是一个完全自主执行模式，能够自动完成复杂的开发任务。
+Execute DFH work strictly through the persisted autopilot state and pipeline.
+Do not run a free-form workflow. Do not skip stages. Do not invent transitions.
 
-**核心价值：** 解放开发者，让 AI 自主完成从需求到实现的全流程。
+## Source Of Truth
 
-## Supported Triggers
+1. `state file`: `.dfh/autopilot/state.json`
+2. `pipeline paths` from state:
+- `paths.specFile`
+- `paths.planFile`
+- `paths.openQuestionsFile`
+3. `current stage`: `pipeline.stages[pipeline.currentStageIndex]`
+4. `required completion signal`: `currentStage.signal`
 
-- User says "dfh-autopilot", "dfh autopilot", "autopilot", "autonomous"
-- User wants full autonomous execution
-- User needs complex multi-step task completion
+If these conflict with chat history, state wins.
 
-## Execution Steps
+## Hard Rules
 
-1. **Analyze Request**: Parse user request and identify requirements
-2. **Create Plan**: Generate detailed execution plan
-3. **Execute Tasks**: Automatically execute each task
-4. **Verify Results**: Validate completion and quality
-5. **Report Status**: Provide comprehensive status report
+1. Never execute a stage that is not `active`.
+2. Never emit a completion signal for work that is not done.
+3. Never emit a signal that does not exactly match `currentStage.signal`.
+4. Never jump directly to QA/validation before execution is complete.
+5. Every stage report must include `Modification Points` before any completion signal.
+6. If no file was changed in this stage, `Modification Points` must include `- (none yet): <reason>`.
+7. If blocked, report blocker details and continue within current stage boundaries.
+8. If state is missing/corrupted, request re-initialization by reporting the issue explicitly.
 
-## Output Format
+## Pipeline Contract
+
+Stages and canonical signals:
+
+- `analyst` (phase `expansion`) -> `DFH_STAGE_ANALYST_COMPLETE`
+- `plan` (phase `planning`) -> `DFH_STAGE_PLAN_COMPLETE`
+- `execute` (phase `execution`) -> `DFH_STAGE_EXECUTE_COMPLETE`
+- `qa` (phase `qa`) -> `DFH_STAGE_QA_COMPLETE`
+- `verify` (phase `validation`) -> `DFH_STAGE_VERIFY_COMPLETE`
+
+`qa` and `verify` may be `skipped` by pipeline config. If skipped in state, do not run them.
+
+## Stage Execution Checklist
+
+### analyst / expansion
+
+- Expand request into implementation-ready requirements.
+- Produce/refresh `specFile`.
+- Capture unresolved decisions in `openQuestionsFile`.
+- Emit analyst signal only after spec is persisted.
+
+### plan / planning
+
+- Read `specFile`.
+- Produce atomic implementation plan in `planFile`.
+- Include dependencies, parallel workstreams, and acceptance criteria.
+- Emit planning signal only after plan is persisted.
+
+### execute / execution
+
+- Read `planFile`.
+- Implement all in-scope tasks.
+- Keep progress grounded in plan tasks and acceptance criteria.
+- Emit execution signal only when all planned tasks are done.
+
+### qa / qa
+
+- Run project quality gate (typecheck/build/tests/lint when available).
+- Fix failures and rerun until pass or explicit blocker.
+- Emit QA signal only when checks pass (or stage is configured skipped in state).
+
+### verify / validation
+
+- Validate implementation against spec + plan.
+- Confirm functional completeness and residual risks.
+- Emit verify signal only when validation pass criteria are met.
+
+## Output Protocol
+
+When working, structure output as:
 
 ```markdown
-## Autopilot Execution Report
-
-### Request Analysis
-- Original request: [user request]
-- Identified tasks: [task list]
-
-### Execution Plan
-1. [Task 1]
-2. [Task 2]
-3. [Task 3]
-
-### Execution Results
-- ✅ [Completed task]
-- ✅ [Completed task]
-- ✅ [Completed task]
-
-### Summary
-- Total tasks: [number]
-- Completed: [number]
-- Failed: [number]
-- Time taken: [duration]
-
-### Next Steps
-- [Recommendations for next actions]
+## DFH Autopilot - <stage id>
+- State file: <path>
+- Current phase: <phase>
+- Required signal: <signal>
+- Progress: <what was completed>
+- Modification Points:
+  - <file or module>: <what changed>
+  - <file or module>: <what changed>
+- Remaining: <what is still pending>
+- Blockers: <none | details>
 ```
 
-## Configuration
+`Modification Points` is mandatory in every stage report.
+If there are no file edits yet, use:
 
-User can configure in `.claude/settings.json`:
-
-```json
-{
-  "dfh": {
-    "autopilot": {
-      "maxTasks": 10,
-      "timeout": 300000,
-      "autoVerify": true
-    }
-  }
-}
+```markdown
+- Modification Points:
+  - (none yet): <reason>
 ```
 
-## Usage
+When stage is complete, append the exact signal in its own line:
 
-Basic usage:
-```
-dfh-autopilot build a REST API for user management
-```
-
-## Integration with Analyst
-
-Autopilot can work with Analyst for better planning:
-
-```
-dfh-analyst analyze requirements
-dfh-autopilot implement the requirements
+```text
+DFH_STAGE_<...>_COMPLETE
 ```
 
-## Success Criteria
+## Completion Protocol
 
-- [ ] All tasks completed successfully
-- [ ] Code quality meets standards
-- [ ] Tests pass
-- [ ] Documentation updated
-- [ ] No errors or warnings
+Only after all non-skipped stages are complete:
+
+1. Ensure state phase reaches `complete`.
+2. Provide final summary:
+- request
+- spec path
+- plan path
+- files created/modified
+- unresolved risks/open items
+
+Do not claim completion early.

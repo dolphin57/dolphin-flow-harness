@@ -6,6 +6,17 @@
 
 import type { HookInput, HookOutput, KeywordMatch } from './types.js';
 
+const KEYWORD_TO_SKILL_MAP: Partial<Record<KeywordMatch['name'], string>> = {
+  autopilot: 'dfh-autopilot',
+  'dfh-autopilot': 'dfh-autopilot',
+  'dfh-analyst': 'dfh-analyst',
+  'dfh-refactor': 'dfh-refactor',
+};
+
+function resolveSkillName(skillName: KeywordMatch['name']): string {
+  return KEYWORD_TO_SKILL_MAP[skillName] ?? skillName;
+}
+
 export function extractPrompt(input: HookInput): string {
   if (input.prompt) return input.prompt;
   if (input.message?.content) return input.message.content;
@@ -49,12 +60,13 @@ export function createSkillInvocation(
   originalPrompt: string,
   args = ''
 ): string {
+  const resolvedSkillName = resolveSkillName(skillName as KeywordMatch['name']);
   const argsSection = args ? `\nArguments: ${args}` : '';
   return `[MAGIC KEYWORD: ${skillName.toUpperCase()}]
 
 You MUST invoke the skill using the Skill tool:
 
-Skill: dolphin-flow-harness:${skillName}${argsSection}
+Skill: dolphin-flow-harness:${resolvedSkillName}${argsSection}
 
 User request:
 ${originalPrompt}
@@ -74,9 +86,10 @@ export function createMultiSkillInvocation(
   const skillBlocks = skills
     .map(
       (s, i) => {
+        const resolvedSkillName = resolveSkillName(s.name);
         const argsSection = s.args ? `\nArguments: ${s.args}` : '';
         return `### Skill ${i + 1}: ${s.name.toUpperCase()}
-Skill: dolphin-flow-harness:${s.name}${argsSection}`;
+Skill: dolphin-flow-harness:${resolvedSkillName}${argsSection}`;
       }
     )
     .join('\n\n');
@@ -104,6 +117,14 @@ export function createHookOutput(additionalContext: string): HookOutput {
 }
 
 export function extractDirectory(input: HookInput): string {
+  if (input.cwd) {
+    return input.cwd;
+  }
+
+  if (input.directory) {
+    return input.directory;
+  }
+
   try {
     if (typeof __dirname !== 'undefined' && __dirname) {
       return __dirname;
@@ -111,5 +132,5 @@ export function extractDirectory(input: HookInput): string {
   } catch {
   }
 
-  return input.cwd || input.directory || process.cwd();
+  return process.cwd();
 }

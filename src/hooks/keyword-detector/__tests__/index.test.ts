@@ -92,7 +92,7 @@ describe('Keyword Detection', () => {
 
   describe('getAllKeywords', () => {
     it('should resolve conflicts correctly', () => {
-      const result = getAllKeywords('cancel autopilot ralph');
+      const result = getAllKeywords('cancelomc autopilot ralph');
       expect(result).toHaveLength(1);
       expect(result[0].name).toBe('cancel');
     });
@@ -216,6 +216,15 @@ describe('Hook Processing', () => {
       const result = processHookInput(input);
       expect(result.continue).toBe(true);
       expect(result.hookSpecificOutput?.additionalContext).toContain('dfh-analyst');
+    });
+
+    it('should map autopilot keyword to the dfh-autopilot skill', () => {
+      const input = { prompt: 'autopilot: build a workflow engine' };
+      const result = processHookInput(input);
+
+      expect(result.hookSpecificOutput?.additionalContext).toContain(
+        'Skill: dolphin-flow-harness:dfh-autopilot'
+      );
     });
 
     it('should suppress output for no keywords', () => {
